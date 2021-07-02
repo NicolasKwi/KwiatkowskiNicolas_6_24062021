@@ -7,8 +7,7 @@ const bcrypt = require('bcrypt');
 exports.signupUser= (req, res, next) => { 
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) => {
-      console.log("hash") 
+    .then((hash) => {      
       const user = new Utilisateur({
         email: req.body.email,
         password: hash,
@@ -21,7 +20,7 @@ exports.signupUser= (req, res, next) => {
 };
 //connection utilisateur
 exports.loginUser= (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   Utilisateur.findOne({ email: req.body.email })
   .then(user => {
     if (!user) {
