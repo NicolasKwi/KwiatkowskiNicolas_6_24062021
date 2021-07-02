@@ -15,7 +15,7 @@ const app = express();
 // Veillez à remplacer l'adresse SRV par la vôtre et la chaîne <PASSWORD> par votre mot de passe utilisateur MongoDB
 mongoose
   .connect(
-    "mongodb+srv://admintotal:owckwxua69FEZ1ap@projet.xr3kx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+   
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
