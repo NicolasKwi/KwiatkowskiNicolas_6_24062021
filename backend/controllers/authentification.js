@@ -1,5 +1,5 @@
 const Utilisateur = require("../models/utilisateur");
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');// securise les echanges de token
 const bcrypt = require('bcrypt');
 
 // post

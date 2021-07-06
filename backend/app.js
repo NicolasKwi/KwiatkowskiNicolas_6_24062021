@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 //securiter
+const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const session = require('cookie-session');
 const nocache = require("nocache");
@@ -14,6 +15,16 @@ const saucesRoutes = require("./routes/sauces");
 const path = require("path");
 
 const app = express();
+
+// Calling the ratelimiter function with its options
+// max: Contains the maximum number of requests
+// windowsMs: Contains the time in milliseconds to receive max requests
+// message: message to be shown to the user on rate-limit
+const limiter = rateLimit({
+  max: 10,
+  windowMs: 5 * 1000, // pour 5 secondes
+  message: "Trop de requête venant de cette adresse IP"
+});
 
 // ***
 const crip=require('./secmong/mong')
@@ -48,8 +59,8 @@ app.use((req, res, next) => {
 });
 // securisation cookies
 app.use(session({ 
-  secret: 'mySuperSecretCookieSalt',
-  name: 'myCookieSessionId',
+  secret: 'Lasaucepiquante',
+  name: 'sessionPiquante',
   cookie: {
     httpOnly: true,
     secure: true,
@@ -64,21 +75,25 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//Securiter
+//*** Securiter ***
+// Adding the rate-limit function to the express middleware so
+// that each requests passes through this limit before executing
+app.use(limiter);
+
 // helmet permet de securiser par defaut 11 vulnérabilitées:
-//helmet.contentSecurityPolicy()
-// helmet.dnsPrefetchControl()
-// helmet.expectCt()
-// helmet.frameguard()
-//helmet.hidePoweredBy()
-// helmet.hsts()
-// helmet.ieNoOpen()
-// helmet.noSniff()
-// helmet.permittedCrossDomainPolicies()
-// helmet.referrerPolicy()
+//helmet.contentSecurityPolicy() -> cross-site scripting
+// helmet.dnsPrefetchControl() -> controle prelecture DNS
+// helmet.expectCt() -> SSl certificat
+// helmet.frameguard() ->  clickjacking attacks
+//helmet.hidePoweredBy() -> benefice securité limité ,plutot utilisé pour economiser la bande passante
+// helmet.hsts()  -> indique au navigateur de preferer le HTTPS au HTTP
+// helmet.ieNoOpen() -> pour Internet Explorer 8  
+// helmet.noSniff() -> Cela atténue le sniffing de type MIME qui peut provoquer des failles de sécurité
+// helmet.permittedCrossDomainPolicies() -> politique du domaine pour le chargement de contenu interdomaine
+// helmet.referrerPolicy() -> contrôle les informations définies dans l'en-tête Referrer
 // helmet.xssFilter()
 app.use(helmet());
-app.use(nocache());
+app.use(nocache()); // essai d'enlever le cache coté client
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
