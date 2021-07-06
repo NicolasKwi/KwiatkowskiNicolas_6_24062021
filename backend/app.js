@@ -1,10 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+require('dotenv').config()
 //securiter
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const session = require('cookie-session');
 const nocache = require("nocache");
+
+
 
 //const bodyParser = require("body-parser");
 
@@ -16,6 +19,8 @@ const path = require("path");
 
 const app = express();
 
+// app.use(dotenv.config());
+
 // Calling the ratelimiter function with its options
 // max: Contains the maximum number of requests
 // windowsMs: Contains the time in milliseconds to receive max requests
@@ -26,18 +31,9 @@ const limiter = rateLimit({
   message: "Trop de requête venant de cette adresse IP"
 });
 
-// ***
-const crip=require('./secmong/mong')
-let umdb =  "0a47408cd23db4cfde6f";
-let mpmdb = "04544e8ecb31aeda893a9b1718f1e8bf";
-
 // app
-// adresse de base : 'mongodb+srv://admintotal:<password>@projet.xr3kx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-// Veillez à remplacer l'adresse SRV par la vôtre et la chaîne <PASSWORD> par votre mot de passe utilisateur MongoDB
 mongoose
-  .connect(
-    `mongodb+srv://${crip.lor(umdb)}:${crip.lor(mpmdb)}@projet.xr3kx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
-    { useNewUrlParser: true, useUnifiedTopology: true }
+  .connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
