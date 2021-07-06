@@ -9,7 +9,7 @@ const utilisateurSchema = mongoose.Schema({
   password: { type: String, required: true },
 });
 
-utilisateurSchema.plugin(uniqueValidator);
+utilisateurSchema.plugin(uniqueValidator,{ message: "Erreur, l'email existe deja."});
 utilisateurSchema.plugin(sanitizerPlugin);
 
 module.exports = mongoose.model("Utilisateur", utilisateurSchema);
