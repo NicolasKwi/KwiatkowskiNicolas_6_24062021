@@ -44,7 +44,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: true,
-    domain: 'http://localhost:3000',
+    domain: 'http://localhost:'+ process.env.PORT,
     // Cookie will expire in 1 hour from when it's generated
     expires: new Date( Date.now() + 60 * 60 * 1000 )
   }
@@ -80,7 +80,7 @@ app.use(nocache()); // essai d'enlever le cache coté client
 const limiter = rateLimit({
   max: 10,
   windowMs: 5 * 1000, // pour 5 secondes
-  message: "Trop de requête venant de cette adresse IP"
+  message: "Trop de requêtes venant de cette adresse IP"
 });
 // Adding the rate-limit function to the express middleware so
 // that each requests passes through this limit before executing
