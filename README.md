@@ -13,6 +13,7 @@ Démarrer ng serve pour avoir accès au serveur de développement. Rendez-vous
 Créé un fichier .env dans la racine du backend, qui se compose de :
 
 TOKEN = RANDOM_TOKEN_SECRET
+
 PORT = 3000
 
 DB_CONNECTION =   //string de connection mongodb //
