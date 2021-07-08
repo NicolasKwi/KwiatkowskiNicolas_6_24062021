@@ -7,10 +7,6 @@ const helmet = require("helmet");
 const session = require('cookie-session');
 const nocache = require("nocache");
 
-
-
-//const bodyParser = require("body-parser");
-
 //routes
 const authRoutes = require("./routes/authentification");
 const saucesRoutes = require("./routes/sauces");
@@ -18,18 +14,6 @@ const saucesRoutes = require("./routes/sauces");
 const path = require("path");
 
 const app = express();
-
-// app.use(dotenv.config());
-
-// Calling the ratelimiter function with its options
-// max: Contains the maximum number of requests
-// windowsMs: Contains the time in milliseconds to receive max requests
-// message: message to be shown to the user on rate-limit
-const limiter = rateLimit({
-  max: 10,
-  windowMs: 5 * 1000, // pour 5 secondes
-  message: "Trop de requête venant de cette adresse IP"
-});
 
 // app
 mongoose
@@ -72,9 +56,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //*** Securiter ***
-// Adding the rate-limit function to the express middleware so
-// that each requests passes through this limit before executing
-app.use(limiter);
 
 // helmet permet de securiser par defaut 11 vulnérabilitées:
 //helmet.contentSecurityPolicy() -> cross-site scripting
@@ -90,6 +71,20 @@ app.use(limiter);
 // helmet.xssFilter()
 app.use(helmet());
 app.use(nocache()); // essai d'enlever le cache coté client
+
+
+// Calling the ratelimiter function with its options
+// max: Contains the maximum number of requests
+// windowsMs: Contains the time in milliseconds to receive max requests
+// message: message to be shown to the user on rate-limit
+const limiter = rateLimit({
+  max: 10,
+  windowMs: 5 * 1000, // pour 5 secondes
+  message: "Trop de requête venant de cette adresse IP"
+});
+// Adding the rate-limit function to the express middleware so
+// that each requests passes through this limit before executing
+app.use(limiter);
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
