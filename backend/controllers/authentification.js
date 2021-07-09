@@ -1,6 +1,7 @@
 const Utilisateur = require("../models/utilisateur");
 const jwt = require('jsonwebtoken');// securise les echanges de token
 const bcrypt = require('bcrypt');
+require('dotenv').config()
 
 // post
 //cree utilisateur (chiffre mot de passe)
